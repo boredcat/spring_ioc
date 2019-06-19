@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:P="http://www.springframework.org/schema/p"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
@@ -28,6 +29,82 @@
 <!--    <bean id="man" class="com.evan.ioc.demo3.Man" init-method="setup" destroy-method="teardown">-->
 <!--        <property name="name" value="Evan"/>-->
 <!--    </bean>-->
-    <bean class="com.evan.ioc.demo3.MyBeanPostProcessor"/>
-    <bean id="userDao" class="com.evan.ioc.demo3.UserDaoImpl"/>
+<!--    <bean class="com.evan.ioc.demo3.MyBeanPostProcessor"/>-->
+<!--    <bean id="userDao" class="com.evan.ioc.demo3.UserDaoImpl"/>-->
+
+    <!--bean的构造方法的属性注入-->
+    <bean id="user" class="com.evan.ioc.demo4.User">
+        <constructor-arg name="name" value="Evan"/>
+        <constructor-arg name="age" value="14"/>
+    </bean>
+
+    <!--set方法的属性注入-->
+<!--    <bean id="cat" class="com.evan.ioc.demo4.Cat">-->
+<!--        <property name="name" value="kitty"/>-->
+<!--    </bean>-->
+<!--    <bean id="person" class="com.evan.ioc.demo4.Person">-->
+<!--        <property name="name" value="Kobe"/>-->
+<!--        <property name="age" value="18"/>-->
+<!--        &lt;!&ndash; 类的注入 &ndash;&gt;-->
+<!--        <property name="cat" ref="cat"/>-->
+<!--    </bean>-->
+
+    <!--P名称空间的属性注入-->
+    <bean id="cat" class="com.evan.ioc.demo4.Cat" P:name="yellow"/>
+    <bean id="person" class="com.evan.ioc.demo4.Person" P:name="james" P:age="20" P:cat-ref="cat"/>
+
+    <!-- SpEL的方式属性注入 -->
+    <bean id="category" class="com.evan.ioc.demo4.Category">
+        <property name="name" value="#{'good'}"/>
+    </bean>
+    <bean id="productInfo" class="com.evan.ioc.demo4.ProductInfo"/>
+    <bean id="product" class="com.evan.ioc.demo4.Product">
+        <property name="name" value="#{'man'}"/>
+        <property name="price" value="#{productInfo.calculatePrice()}"/>
+        <property name="category" value="#{category}"/>
+    </bean>
+
+    <!-- 集合类型的属性注入 -->
+    <bean id="collectionBean" class="com.evan.ioc.demo5.CollectionBean">
+        <!-- 数组注入 -->
+        <property name="args">
+            <list>
+                <value>aaa</value>
+                <value>bbb</value>
+                <value>ccc</value>
+            </list>
+        </property>
+        <!-- List集合注入 -->
+        <property name="list">
+            <list>
+                <value>111</value>
+                <value>222</value>
+                <value>333</value>
+            </list>
+        </property>
+        <!-- Set集合注入 -->
+        <property name="set">
+            <set>
+                <value>ddd</value>
+                <value>eee</value>
+                <value>ccc</value>
+            </set>
+        </property>
+        <!-- map集合属性注入 -->
+        <property name="map">
+            <map>
+                <entry key="a" value="1"/>
+                <entry key="b" value="2"/>
+                <entry key="c" value="3"/>
+            </map>
+        </property>
+        <property name="properties">
+            <props>
+                <prop key="username">root</prop>
+                <prop key="password">1234</prop>
+            </props>
+        </property>
+
+    </bean>
+
 </beans>
